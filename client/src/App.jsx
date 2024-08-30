@@ -8,7 +8,10 @@ import Profile from './pages/Profile'
 import About from './pages/About'
 import SignUp from './pages/SignUp'
 import CreateListing from './pages/CreateListing.jsx'
+import EditListing from './pages/EditListing.jsx'
 import Header from './components/Header'
+import Listing from './pages/Listing.jsx'
+import Search from './pages/Search.jsx'
 
 
 
@@ -20,12 +23,14 @@ const App = () => {
         <Route path='/' element ={<Home />}></Route>
         <Route path='/sign-in' element ={<SignIn />}></Route>
         <Route path='/sign-up' element ={<SignUp />}></Route>
+        <Route path='/listing/:listingId' element ={<Listing/>}/>
+        <Route path='/about' element ={<About />}></Route>
+        <Route path='/search' element ={<Search />}></Route>
         <Route element ={<PrivateRoute/>}>
           <Route path='/profile' element ={<Profile />}/>
           <Route path='/create-listing' element ={<CreateListing />}/>
+          <Route path='/update-listing/:listingId' element ={<EditListing />}/>
         </Route>
-        <Route path='/about' element ={<About />}></Route>
-
       </Routes>
     </BrowserRouter>
   )

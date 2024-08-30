@@ -1,3 +1,4 @@
+import Listing from '../models/listing.model.js'
 import User from '../models/user.model.js'
 import { errorHandler } from "../utils/error.js"
 import bcryptjs from 'bcryptjs'
@@ -31,14 +32,7 @@ export const updateUser = async (req,res,next)=>{
     }
 }
 
-export const logout = async (req,res,next)=>{
-    try{
-        res.clearCookie("access_token").status(200).json("user logout");
-    }
-    catch(err){
-        next(err);
-    }
-}
+
 
 export const deleteUser = async(req,res,next)=>{
     console.log(req.user.id,req.params.id)
@@ -54,3 +48,35 @@ export const deleteUser = async(req,res,next)=>{
     }
 
 }
+
+export const getUserListings = async(req,res,next)=>{
+    if(req.user.id===req.params.id){
+        try{
+            const listings = await Listing.find({userRef:req.params.id});
+            res.status(200).json(listings);
+        }
+        catch(err){
+            next(err);
+        }
+    }
+    else{
+        return next(errorHandler(401,'you can view only your own listings'));
+    }
+}
+
+export const getUser = async (req,res,next)=>{
+
+    try{
+        const user = await User.findById(req.params.id);
+        if(!user) return next(errorHandler(404,'User not found'));
+       
+        const {password:pass,...rest} = user._doc;
+       
+        res.status(200).json(rest);
+    }
+    catch(err){
+        next(err);
+    }
+
+}
+
